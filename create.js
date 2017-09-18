@@ -36,6 +36,7 @@ export function main(event, context, callback) {
 
     // Return status code 500 on error
     if (error) {
+      console.log("error is here .", error);
       const response = {
         statusCode: 500,
         headers: headers,
@@ -46,6 +47,7 @@ export function main(event, context, callback) {
     }
 
     // Return status code 200 and the newly created item
+
     const response = {
       statusCode: 200,
       headers: headers,

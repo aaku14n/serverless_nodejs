@@ -1,5 +1,4 @@
 const MongoClient = require("mongodb").MongoClient;
-const bluebird = require("bluebird");
 const assert = require("assert");
 
 module.exports.main = (event, context, callback) => {

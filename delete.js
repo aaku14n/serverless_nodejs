@@ -1,6 +1,4 @@
 const uuid = require("uuid");
-const bluebird = require("bluebird");
-// import AWS from "aws-sdk";
 const dateFormat = require("dateformat");
 const assert = require("assert");
 const now = new Date();

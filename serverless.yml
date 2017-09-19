@@ -1,13 +1,5 @@
 service: notes-app-api
 
-# Use serverless-webpack plugin to transpile ES6/ES7
-# plugins:
-#   - serverless-webpack
-
-# # Enable auto-packing of external modules
-# custom:
-#   webpackIncludeModules: true
-
 provider:
   name: aws
   runtime: nodejs6.10
@@ -17,19 +9,6 @@ provider:
     # atlas_connection_uri: mongodb://admin:admin@serverless-shard-00-00-ahez6.mongodb.net:27017,serverless-shard-00-01-ahez6.mongodb.net:27017,serverless-shard-00-02-ahez6.mongodb.net:27017/practiceserverless?ssl=true&replicaSet=serverless-shard-0&authSource=admin
     atlas_connection_uri: mongodb://root:root@cluster0-shard-00-00-b6g1j.mongodb.net:27017,cluster0-shard-00-01-b6g1j.mongodb.net:27017,cluster0-shard-00-02-b6g1j.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin
 
-  # 'iamRoleStatement' defines the permission policy for the Lambda function.
-  # In this case Lambda functions are granted with permissions to access DynamoDB.
-  # iamRoleStatements:
-  #   - Effect: Allow
-  #     Action:
-  #       - dynamodb:DescribeTable
-  #       - dynamodb:Query
-  #       - dynamodb:Scan
-  #       - dynamodb:GetItem
-  #       - dynamodb:PutItem
-  #       - dynamodb:UpdateItem
-  #       - dynamodb:DeleteItem
-  #     Resource: "arn:aws:dynamodb:us-east-1:*:*"
 
 functions:
   create:
@@ -39,7 +18,6 @@ functions:
           path: notes
           method: post
           cors: true
-
   delete:
     handler: delete.main
     events:
@@ -51,7 +29,6 @@ functions:
             parameters:
              paths:
                id: true
-
   fetch:
     handler: fetch.main
     events:
@@ -63,3 +40,10 @@ functions:
             parameters:
              paths:
                id: true
+  update:
+    handler: update.main
+    events:
+      - http:
+          path: notes
+          method: post
+          cors: true

@@ -1,20 +1,46 @@
-import uuid from "uuid";
-import AWS from "aws-sdk";
+"use strict";
+const uuid = require("uuid");
+// import AWS from "aws-sdk";
 const MongoClient = require("mongodb").MongoClient;
 const assert = require("assert");
-export function main(event, context, callback) {
-  // Request body is passed in as a JSON encoded string in 'event.body'
-  const data = JSON.parse(event.body);
+module.exports.main = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  const temp = {
+    first_name: event.first_name,
+    last_name: event.last_name,
+    email_id: event.email_id,
+    contact_number: event.contact_number,
+    image_url: event.image_url,
+    test_flag: event.test_flag,
+    password: event.password,
+    description: event.description,
+    label: event.label,
+    response: event.response
+  };
 
-  const params = {
-    TableName: "notes",
-    Item: {
-      userId: 123345,
-      noteId: uuid.v1(),
-      content: "sdfadsf",
-      attachment: "attechment",
-      createdAt: new Date().getTime()
-    }
+  const data = temp;
+  var User = {
+    user_id: uuid.v1(),
+    first_name: data.first_name,
+    last_name: data.last_name,
+    email_id: data.email_id,
+    contact_number: data.contact_number,
+    image_url: data.image_url,
+    test_flag: false,
+    password: data.password,
+    test: [
+      {
+        test_id: uuid.v1(),
+        questions: [
+          {
+            question_id: uuid.v1(),
+            description: data.description,
+            label: data.label,
+            response: data.response
+          }
+        ]
+      }
+    ]
   };
 
   context.callbackWaitsForEmptyEventLoop = false;
@@ -26,19 +52,22 @@ export function main(event, context, callback) {
       try {
         db
           .collection("Cluster0")
-          .findOne(
-            { email_id: "aaakarsh@gmaiil.com" },
-            { email_id: 1, _id: 0 },
-            (err, result) => {
-              if (err) {
-                callback(null, { statusCode: 500, body: JSON.stringify(err) });
-              } else if (result !== null) {
+          .update(
+            { user_id: User.user_id },
+            User,
+            { upsert: true },
+            (error, user) => {
+              if (err)
                 callback(null, {
                   statusCode: 500,
-                  body: "email id is already register please try to login"
+                  body: JSON.stringify(error)
                 });
-                db.close();
-              }
+              let data = { id: User.user_id, User: User, tokenId: "" };
+              callback(null, {
+                statusCode: 200,
+                body: JSON.stringify(data)
+              });
+              db.close();
             }
           );
       } catch (err) {
@@ -46,4 +75,4 @@ export function main(event, context, callback) {
       }
     }
   );
-}
+};

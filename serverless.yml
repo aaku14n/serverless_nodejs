@@ -32,7 +32,7 @@ provider:
   #     Resource: "arn:aws:dynamodb:us-east-1:*:*"
 
 functions:
-  Create:
+  create:
     handler: create.main
     events:
       - http:
@@ -40,10 +40,26 @@ functions:
           method: post
           cors: true
 
-  Fetch:
+  delete:
+    handler: delete.main
+    events:
+      - http:
+          path: notes/{id}
+          method: get
+          cors: true
+          request:
+            parameters:
+             paths:
+               id: true
+
+  fetch:
     handler: fetch.main
     events:
       - http:
           path: notes/{id}
           method: get
           cors: true
+          request:
+            parameters:
+             paths:
+               id: true

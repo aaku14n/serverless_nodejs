@@ -3,7 +3,8 @@ const uuid = require("uuid");
 // import AWS from "aws-sdk";
 const MongoClient = require("mongodb").MongoClient;
 const assert = require("assert");
-module.exports.main = (event, context, callback) => {
+module.exports.create = (event, context, callback) => {
+
   context.callbackWaitsForEmptyEventLoop = false;
   const temp = {
     first_name: event.first_name,
@@ -71,7 +72,7 @@ module.exports.main = (event, context, callback) => {
             }
           );
       } catch (err) {
-        callback(err);
+        callback(null,{statusCode: 500,body : JSON.stringify({data:"Probles in data base"})});
       }
     }
   );

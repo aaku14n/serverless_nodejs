@@ -4,6 +4,7 @@ A app with serverless in nodejs
 <ul>
   <li>Clone this repository.</li>
   <li>then run commmand npm install or yarn install </li>
+  <li>Serverless deploy</li>
 </ul>
 
 <h3>Run tests :-</h3>

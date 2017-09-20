@@ -4,10 +4,8 @@ const assert = require("assert");
 const now = new Date();
 const MongoClient = require("mongodb").MongoClient;
 
-module.exports.main = (event, context, callback) => {
-  let id = event.id;
-  id = "e337cda0-9d27-11e7-8fb7-77e3d38b870c";
-  console.log(event);
+module.exports.delete = (event, context, callback) => {
+  const id = event.pathParameters.id;
   if (id) {
     MongoClient.connect(process.env.atlas_connection_uri, (err, db) => {
       assert.equal(null, err);
@@ -25,7 +23,6 @@ module.exports.main = (event, context, callback) => {
               statusCode: 200,
               body: "No user exist with this email id"
             });
-            db.close();
           }
           db.close();
         });

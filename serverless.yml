@@ -1,49 +1,46 @@
-service: notes-app-api
+
+service: first-example
+
 
 provider:
   name: aws
   runtime: nodejs6.10
   stage: dev
-  region: ap-northeast-1
+  region: us-east-1
   environment:
-    # atlas_connection_uri: mongodb://admin:admin@serverless-shard-00-00-ahez6.mongodb.net:27017,serverless-shard-00-01-ahez6.mongodb.net:27017,serverless-shard-00-02-ahez6.mongodb.net:27017/practiceserverless?ssl=true&replicaSet=serverless-shard-0&authSource=admin
     atlas_connection_uri: mongodb://root:root@cluster0-shard-00-00-b6g1j.mongodb.net:27017,cluster0-shard-00-01-b6g1j.mongodb.net:27017,cluster0-shard-00-02-b6g1j.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin
 
 
+
 functions:
+  hello:
+    handler: Handler.hello
+    events:
+     - http:
+         path: test
+         method: get
   create:
-    handler: create.main
+    handler: Create.create
     events:
       - http:
-          path: notes
+          path: create_data
           method: post
-          cors: true
   delete:
-    handler: delete.main
+    handler: Delete.delete
     events:
       - http:
-          path: notes/{id}
+          path: notes_delete
           method: get
-          cors: true
-          request:
-            parameters:
-             paths:
-               id: true
   fetch:
-    handler: fetch.main
+    handler: Fetch.fetch
     events:
       - http:
-          path: notes/{id}
+          path: notes_fetch/{id}
           method: get
-          cors: true
-          request:
-            parameters:
-             paths:
-               id: true
   update:
-    handler: update.main
+    handler: Update.update
     events:
       - http:
-          path: notes
+          path: notes_update
           method: post
-          cors: true
+

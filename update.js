@@ -3,9 +3,8 @@ const uuid = require("uuid");
 // import AWS from "aws-sdk";
 const MongoClient = require("mongodb").MongoClient;
 const assert = require("assert");
-module.exports.main = (event, context, callback) => {
-  context.callbackWaitsForEmptyEventLoop = false;
-  const temp = {
+module.exports.update = (event, context, callback) => {
+  const User = {
     first_name: event.first_name,
     last_name: event.last_name,
     email_id: event.email_id,
@@ -17,10 +16,6 @@ module.exports.main = (event, context, callback) => {
     label: event.label,
     response: event.response
   };
-
-  const data = temp;
-
-  context.callbackWaitsForEmptyEventLoop = false;
   if (event.id) {
     MongoClient.connect(
       process.env.atlas_connection_uri,
@@ -31,24 +26,27 @@ module.exports.main = (event, context, callback) => {
           db
             .collection("Cluster0")
             .update(
-              { user_id: event.user_id },
-              {$set:data},
-              {upsert :false}
-              (error, result) => {
+              { user_id: event.id },
+              User,
+              { upsert: true },
+              (error, user) => {
                 if (err)
                   callback(null, {
                     statusCode: 500,
                     body: JSON.stringify(error)
-                  });else{
+                  });
                 callback(null, {
                   statusCode: 200,
-                  body: JSON.stringify(result)
-                });}
+                  body: JSON.stringify({ user, status: "Success" })
+                });
                 db.close();
               }
             );
         } catch (err) {
-          callback(err);
+          callback(null, {
+            statusCode: 500,
+            body: JSON.stringify({ data: "Probles in data base" })
+          });
         }
       }
     );

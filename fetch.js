@@ -1,8 +1,8 @@
 const MongoClient = require("mongodb").MongoClient;
 const assert = require("assert");
 
-module.exports.main = (event, context, callback) => {
-  const id = "3d368560-9d2a-11e7-aed7-a5109e79613d";
+module.exports.fetch = (event, context, callback) => {
+  const id = event.pathParameters.id;
   if (id) {
     MongoClient.connect(process.env.atlas_connection_uri, (err, db) => {
       assert.equal(null, err);
